@@ -115,6 +115,20 @@
                 android:background="@drawable/bg_color_btn_mask" />
         </LinearLayout>
     </LinearLayout>
+    <!-- 添加图片按钮 -->
+    <!--id布局标识：add_img_btn
+        width布局宽度：warp content和内容一样
+        margin布局与屏幕边界
+        padding布局与周围控件距离-->
+    <ImageButton
+        android:id="@+id/add_img_btn"   
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="7dp"
+        android:layout_marginTop="600dp"
+        android:layout_marginBottom="7dp"
+        android:src="@android:drawable/ic_menu_gallery"/>
+
 
     <ImageView
         android:id="@+id/btn_set_bg_color"
