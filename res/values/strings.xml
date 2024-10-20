@@ -131,5 +131,8 @@
         <!-- Case of 0 or 2 or more results. -->
         <item quantity="other"><xliff:g id="number" example="15">%1$s</xliff:g> results for \"<xliff:g id="search" example="???">%2$s</xliff:g>\"</item>
     </plurals>
-
+	<string name="tips_of_revoke">提示</string>
+	<string name="can_not_revoke">您不能再执行撤销了</string>
+	<string name="have_not_input_anything">您还没有输入任何内容</string>
+	<string name="menu_revoke">撤销</string>
 </resources>
