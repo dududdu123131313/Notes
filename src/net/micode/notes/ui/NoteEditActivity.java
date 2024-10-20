@@ -152,6 +152,9 @@ public class NoteEditActivity extends Activity implements OnClickListener,
     private String mUserQuery;
     private Pattern mPattern;
 
+    private static final int MAX_TIME_OF_RVOKE_TIME=100;
+    private int MAX_OF_RVOKE_TIME=100;
+
 /*    注释掉源码
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -476,6 +479,27 @@ private void convertToImage() {
             mFontSizeId = ResourceParser.BG_DEFAULT_FONT_SIZE;
         }
         mEditTextList = (LinearLayout) findViewById(R.id.note_edit_list);
+
+        NoteEditor.addTextChangedListener(new TextWatcher() {
+        @Override
+        // start：变化开始的位置
+        // count：将要被替换的文本长度
+        // after：变化后文本的长度
+            public void beforeTextChanged(CharSequence s, int start, int count, int after)
+            {
+            }
+        @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+            }
+        @Override
+            public void afterTextChanged(Editable s) {//文本更改后
+            if(!mIsRvoke) {
+                saveMyChanged();
+            }else {
+                 mIsRvoke = false;
+                }
+            }
+            });
     }
 
     @Override
@@ -627,6 +651,9 @@ private void convertToImage() {
                 break;
             case R.id.menu_delete_remind:
                 mWorkingNote.setAlertDate(0, false);
+                break;
+            case R.id.menu_revoke:
+                doRevoke();
                 break;
             default:
                 break;
@@ -1098,5 +1125,46 @@ public String getPath(final Context context, final Uri uri) {
                 break;
         }
     }
-    //  
+    private void saveMyChanged()
+    {
+        SpannableString text = new SpannableString(mNoteEditor.getText());//用 getText 方法获取每次编辑的内容
+        if(mChanged.size()>=MAX_TIME_OF_RVOKE_TIME){//如果栈中的数据大于最大撤销次数，
+            就把第一次修改的内容删除
+            mChanged.removeElementAt(0);
+            }
+            mChanged.add(text);//然后把本次修改的内容加入栈中
+    }
+        
+    private void doRevoke(){
+     int size = mChanged.size();//获取当前栈大小
+    AlertDialog.Builder dialog = new AlertDialog.Builder(this);//创建一个alertdialog 窗口
+                
+    dialog.setTitle(R.string.tips_of_revoke);//设置 title 信息
+    dialog.setCancelable(true);//设置为可取消
+    dialog.setPositiveButton("OK", new DialogInterface.OnClickListener() {//只需 要设置一个 OK 键即可
+                       
+    @Override
+
+    public void onClick(DialogInterface dialog, int which) {
+                        }
+    });
+    mIsRvoke = true;//把是否已执行撤销的标记设置为 true
+    if(size<=1){//如果栈中元素过少，打印提示信息
+    dialog.setMessage(R.string.have_not_input_anything);//提示用户您还没有输入 任何信息
+                       
+    dialog.show();//显示当前 alertdialog
+    return;
+    }
+    else {
+        mNoteEditor.setText((CharSequence) mChanged.elementAt(size-2));//在textview 中设置撤销的内容
+        
+        mNoteEditor.setSelection(mNoteEditor.length());
+        mChanged.removeElementAt(size-1);//删除元素
+        if(size==2){
+        dialog.setMessage(R.string.can_not_revoke);//如果只有一次操作，那么提示用户不能再撤销了
+      
+        dialog.show();//显示当前 alertdialog
+        }
+        }
+        }           
 }
