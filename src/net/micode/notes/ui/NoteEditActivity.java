@@ -1128,8 +1128,8 @@ public String getPath(final Context context, final Uri uri) {
     private void saveMyChanged()
     {
         SpannableString text = new SpannableString(mNoteEditor.getText());//用 getText 方法获取每次编辑的内容
-        if(mChanged.size()>=MAX_TIME_OF_RVOKE_TIME){//如果栈中的数据大于最大撤销次数，
-            就把第一次修改的内容删除
+        if(mChanged.size()>=MAX_TIME_OF_RVOKE_TIME){//如果栈中的数据大于最大撤销次数， 就把第一次修改的内容删除
+           
             mChanged.removeElementAt(0);
             }
             mChanged.add(text);//然后把本次修改的内容加入栈中
@@ -1149,7 +1149,7 @@ public String getPath(final Context context, final Uri uri) {
                         }
     });
     mIsRvoke = true;//把是否已执行撤销的标记设置为 true
-    if(size<=1){//如果栈中元素过少，打印提示信息
+    if(size<=1){//如果栈中元素过少
     dialog.setMessage(R.string.have_not_input_anything);//提示用户您还没有输入 任何信息
                        
     dialog.show();//显示当前 alertdialog
